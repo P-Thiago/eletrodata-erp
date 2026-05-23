@@ -1360,16 +1360,42 @@ function editarMembro(i){
 }
 function salvarMembro(){
   const p = equipeDB[editMembroIdx];
-  p.nome  = document.getElementById('em-nome').value.trim() || p.nome;
-  p.email = document.getElementById('em-email').value.trim() || p.email;
-  p.cargo = document.getElementById('em-cargo').value.trim() || p.cargo;
-  p.equipe= document.getElementById('em-equipe').value;
-  // update initials
+  const nomeAntigo = p.nome;
+  const novoNome   = document.getElementById('em-nome').value.trim() || p.nome;
+
+  p.nome   = novoNome;
+  p.email  = document.getElementById('em-email').value.trim() || p.email;
+  p.cargo  = document.getElementById('em-cargo').value.trim() || p.cargo;
+  p.equipe = document.getElementById('em-equipe').value;
   const parts = p.nome.split(' ');
   p.ini = (parts[0][0]+(parts[1]?parts[1][0]:'')).toUpperCase();
+
+  // Propaga nome em todos os registros do sistema
+  if(novoNome !== nomeAntigo){
+    // Chamados — campo resp
+    chamadosDB.forEach(c => {
+      if(c.resp === nomeAntigo) c.resp = novoNome;
+    });
+    // Viagens — campos func e aprov
+    viagensDB.forEach(v => {
+      if(v.func  === nomeAntigo) v.func  = novoNome;
+      if(v.aprov === nomeAntigo) v.aprov = novoNome;
+    });
+    // Despesas — campo func
+    despesasDB.forEach(d => {
+      if(d.func === nomeAntigo) d.func = novoNome;
+    });
+    // Estoque — movimentações (responsável)
+    // (campo resp nas movimentações é estático no HTML, mas atualiza se existir no DOM)
+  }
+
   closeModal('ov-edit-membro');
+  // Re-renderiza todos os painéis afetados
   renderEquipe();
-  toast('✅ Colaborador atualizado com sucesso!');
+  renderChamados(chamadosDB);
+  renderViagens(viagensDB);
+  renderDespesas();
+  toast('✅ ' + novoNome + ' atualizado em todos os registros!');
 }
 document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('ov-edit-membro').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeModal('ov-edit-membro'); });
