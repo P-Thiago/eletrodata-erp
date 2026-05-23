@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Eletrodata Engenharia · ERP</title>
+<title>Eletrodata engenharia · demo v3 · Demo v3</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -425,6 +425,68 @@ select option { background:#1B3F72; }
   text-transform:uppercase; letter-spacing:1px;
   color:var(--muted); padding:8px 16px !important;
 }
+
+/* ── MOBILE ── */
+.hamburger {
+  display:none;
+  background:none; border:none;
+  color:#fff; font-size:22px;
+  cursor:pointer; padding:4px 8px;
+  line-height:1; flex-shrink:0;
+}
+
+.sidebar-overlay {
+  display:none;
+  position:fixed; inset:0;
+  background:rgba(0,0,0,0.55);
+  z-index:150;
+  backdrop-filter:blur(2px);
+}
+.sidebar-overlay.open { display:block; }
+
+@media (max-width: 768px) {
+  .hamburger { display:flex; align-items:center; }
+
+  .sidebar {
+    position:fixed;
+    left:-250px; top:0; bottom:0;
+    width:230px; min-width:230px;
+    z-index:200;
+    transition:left .25s ease;
+  }
+  .sidebar.open { left:0; }
+
+  .main { width:100%; }
+
+  .topbar {
+    padding:0 14px;
+    gap:10px;
+  }
+  .topbar-title { font-size:18px; }
+
+  .search { display:none; }
+
+  .btn-ghost { display:none; }
+
+  .btn-red { padding:7px 12px; font-size:12px; }
+
+  .stats { grid-template-columns:1fr 1fr; }
+  .g2 { grid-template-columns:1fr; }
+  .g3 { grid-template-columns:1fr 1fr; }
+
+  .content { padding:16px 14px; }
+
+  .tbl th, .tbl td { padding:9px 10px; font-size:12px; }
+
+  /* hide less important columns on mobile */
+  .tbl .hide-mob { display:none; }
+}
+
+@media (max-width: 480px) {
+  .stats { grid-template-columns:1fr; }
+  .g3 { grid-template-columns:1fr; }
+  .stat-val { font-size:28px; }
+}
 </style>
 </head>
 <body>
@@ -441,7 +503,7 @@ select option { background:#1B3F72; }
     </div>
     <div class="logo-text-wrap">
       <div class="logo-name">eletrodata</div>
-      <div class="logo-sub">engenharia · erp</div>
+      <div class="logo-sub">engenharia · demo v3</div>
     </div>
   </div>
 
@@ -495,6 +557,7 @@ select option { background:#1B3F72; }
 <!-- ═══════════ MAIN ═══════════ -->
 <main class="main">
   <header class="topbar">
+    <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
     <div class="topbar-title" id="ttl">Dashboard</div>
     <div class="search">
       <span style="color:var(--muted)">🔍</span>
@@ -1110,10 +1173,28 @@ function salvarProduto(){
   toast('✅ Produto atualizado com sucesso!');
 }
 
+// ── MOBILE SIDEBAR ──
+function toggleSidebar(){
+  document.querySelector('.sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('open');
+}
+function closeSidebar(){
+  document.querySelector('.sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+}
+
+// Close sidebar when nav item clicked on mobile
+document.querySelectorAll('.nav-item').forEach(item=>{
+  item.addEventListener('click', ()=>{
+    if(window.innerWidth <= 768) closeSidebar();
+  });
+});
+
 // init
 renderChamados(chamadosDB);
 renderEstoque();
 renderEquipe();
 </script>
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 </body>
 </html>
