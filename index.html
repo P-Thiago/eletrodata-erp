@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eletrodata Engenharia · ERP</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --azul:       #1B3F72;
+  --azul-med:   #234F8C;
+  --azul-light: #2B5BA8;
+  --azul-surf:  #1A3560;
+  --azul-dark:  #112849;
+  --vermelho:   #E8193C;
+  --verm-dark:  #C0102C;
+  --branco:     #FFFFFF;
+  --cinza:      #E4EAF2;
+  --cinza2:     #B8C8DC;
+  --texto:      #EBF0F8;
+  --muted:      #7A9AB8;
+  --border:     rgba(255,255,255,0.1);
+  --surface:    rgba(255,255,255,0.05);
+  --font-head:  'Barlow Condensed', sans-serif;
+  --font-body:  'Barlow', sans-serif;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--azul-dark);
+  color: var(--texto);
+  font-family: var(--font-body);
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 230px; min-width: 230px;
+  background: var(--azul);
+  display: flex; flex-direction: column;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  position: relative; overflow: hidden;
+}
+
+.sidebar::after {
+  content:'';
+  position:absolute; bottom:-60px; left:-60px;
+  width:200px; height:200px;
+  background: radial-gradient(circle, rgba(232,25,60,0.15) 0%, transparent 70%);
+  pointer-events:none;
+}
+
+.logo-wrap {
+  padding: 22px 20px 18px;
+  border-bottom: 1px solid var(--border);
+  display:flex; align-items:center; gap:12px;
+}
+
+.logo-icon {
+  width:42px; height:42px;
+  background: var(--vermelho);
+  border-radius: 10px;
+  display:flex; align-items:center; justify-content:center;
+  font-family: var(--font-head);
+  font-size:22px; font-weight:800;
+  color:#fff;
+  flex-shrink:0;
+  position:relative; overflow:hidden;
+}
+
+.logo-icon::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; bottom:0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+}
+
+.logo-icon svg { position:relative; z-index:1; }
+
+.logo-text-wrap { line-height:1.1; }
+.logo-name {
+  font-family: var(--font-head);
+  font-size:18px; font-weight:800;
+  color:#fff; letter-spacing:0.5px;
+}
+.logo-sub {
+  font-size:10px; color: rgba(255,255,255,0.5);
+  text-transform:uppercase; letter-spacing:1.5px; font-weight:500;
+}
+
+.nav-group { padding: 16px 12px 4px; }
+.nav-group-label {
+  font-size:10px; color: var(--muted);
+  text-transform:uppercase; letter-spacing:1.5px;
+  font-weight:600; padding:0 8px; margin-bottom:6px;
+}
+
+.nav-item {
+  display:flex; align-items:center; gap:10px;
+  padding:9px 12px; border-radius:8px;
+  cursor:pointer; transition:all .18s;
+  font-size:13.5px; color: rgba(255,255,255,0.65);
+  font-weight:500; margin-bottom:2px;
+  position:relative; user-select:none;
+}
+
+.nav-item:hover { background:rgba(255,255,255,0.08); color:#fff; }
+
+.nav-item.active {
+  background: var(--vermelho);
+  color:#fff;
+}
+
+.nav-item .ni { font-size:16px; width:20px; text-align:center; flex-shrink:0; }
+
+.nav-badge {
+  margin-left:auto;
+  background:rgba(255,255,255,0.2);
+  color:#fff; font-size:10px; font-weight:700;
+  padding:2px 7px; border-radius:20px;
+}
+
+.nav-item.active .nav-badge { background:rgba(0,0,0,0.2); }
+
+.sidebar-bottom {
+  margin-top:auto;
+  padding:14px 12px;
+  border-top:1px solid var(--border);
+}
+
+.user-card {
+  display:flex; align-items:center; gap:10px;
+  padding:8px 10px; border-radius:8px;
+  cursor:pointer; transition:background .18s;
+}
+.user-card:hover { background:rgba(255,255,255,0.08); }
+
+.avatar {
+  width:34px; height:34px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-head); font-weight:800; font-size:13px;
+  color:#fff; flex-shrink:0;
+}
+
+.user-name { font-size:13px; font-weight:600; color:#fff; }
+.user-role { font-size:11px; color:var(--muted); }
+
+/* ── MAIN ── */
+.main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+
+/* TOPBAR */
+.topbar {
+  background: var(--azul);
+  border-bottom:1px solid var(--border);
+  padding:0 28px;
+  height:60px;
+  display:flex; align-items:center; gap:16px;
+  flex-shrink:0;
+}
+
+.topbar-title {
+  font-family:var(--font-head);
+  font-size:22px; font-weight:800;
+  color:#fff; letter-spacing:0.5px;
+  flex:1;
+}
+
+.search {
+  display:flex; align-items:center; gap:8px;
+  background:rgba(255,255,255,0.07);
+  border:1px solid var(--border);
+  border-radius:8px; padding:7px 14px;
+  width:220px;
+}
+.search input {
+  background:none; border:none; outline:none;
+  color:#fff; font-family:var(--font-body); font-size:13px; width:100%;
+}
+.search input::placeholder { color:var(--muted); }
+
+.btn {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:8px 18px; border-radius:8px;
+  font-family:var(--font-body); font-size:13px; font-weight:600;
+  cursor:pointer; border:none; transition:all .18s; white-space:nowrap;
+}
+.btn-red { background:var(--vermelho); color:#fff; }
+.btn-red:hover { background:var(--verm-dark); }
+.btn-ghost { background:rgba(255,255,255,0.08); color:#fff; border:1px solid var(--border); }
+.btn-ghost:hover { background:rgba(255,255,255,0.15); }
+
+/* CONTENT */
+.content { flex:1; overflow-y:auto; padding:24px 28px; }
+
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.15); border-radius:3px; }
+
+/* PANELS */
+.panel { display:none; }
+.panel.active { display:block; }
+
+/* STATS */
+.stats { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:20px; }
+
+.stat {
+  background: var(--azul);
+  border:1px solid var(--border);
+  border-radius:12px; padding:18px 20px;
+  position:relative; overflow:hidden;
+  transition:border-color .2s;
+}
+.stat:hover { border-color:rgba(232,25,60,0.4); }
+
+.stat-stripe {
+  position:absolute; top:0; right:0;
+  width:4px; height:100%; border-radius:0 12px 12px 0;
+}
+
+.stat-label { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--muted); font-weight:600; margin-bottom:10px; }
+.stat-val {
+  font-family:var(--font-head); font-size:36px; font-weight:800;
+  line-height:1; margin-bottom:4px;
+}
+.stat-desc { font-size:12px; color:var(--muted); }
+.stat-desc b { color:var(--texto); font-weight:600; }
+
+/* GRID */
+.g2 { display:grid; grid-template-columns:1.5fr 1fr; gap:16px; margin-bottom:16px; }
+.g3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:16px; }
+
+/* CARD */
+.card {
+  background:var(--azul);
+  border:1px solid var(--border);
+  border-radius:12px; overflow:hidden;
+  margin-bottom:16px;
+}
+
+.card-hd {
+  padding:15px 20px;
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.card-title {
+  font-family:var(--font-head); font-size:16px; font-weight:700;
+  color:#fff; letter-spacing:0.3px;
+  display:flex; align-items:center; gap:8px;
+}
+.card-link { font-size:12px; color:var(--muted); cursor:pointer; transition:color .15s; }
+.card-link:hover { color:#fff; }
+
+/* TABLE */
+.tbl { width:100%; border-collapse:collapse; }
+.tbl th {
+  text-align:left; padding:10px 16px;
+  font-size:10.5px; text-transform:uppercase; letter-spacing:1px;
+  color:var(--muted); font-weight:600;
+  border-bottom:1px solid var(--border);
+}
+.tbl td {
+  padding:11px 16px; font-size:13px;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+  vertical-align:middle;
+}
+.tbl tr:last-child td { border-bottom:none; }
+.tbl tr:hover td { background:rgba(255,255,255,0.03); }
+.tbl tr.warn td { background:rgba(232,25,60,0.05); }
+
+/* CHIPS */
+.chip {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:3px 9px; border-radius:20px;
+  font-size:11px; font-weight:700; letter-spacing:0.2px;
+  white-space:nowrap;
+}
+.chip::before { content:''; width:5px; height:5px; border-radius:50%; }
+
+.c-aberto    { background:rgba(43,91,168,0.3); color:#7EB3FF; }
+.c-aberto::before { background:#7EB3FF; }
+.c-andamento { background:rgba(232,209,25,0.15); color:#FFD700; }
+.c-andamento::before { background:#FFD700; }
+.c-fechado   { background:rgba(25,200,100,0.15); color:#4ADE80; }
+.c-fechado::before { background:#4ADE80; }
+.c-critico   { background:rgba(232,25,60,0.2); color:#FF6B85; }
+.c-critico::before { background:#FF6B85; }
+.c-ok        { background:rgba(25,200,100,0.15); color:#4ADE80; }
+.c-ok::before { background:#4ADE80; }
+.c-alerta    { background:rgba(255,165,0,0.15); color:#FFA500; }
+.c-alerta::before { background:#FFA500; }
+.c-baixo     { background:rgba(25,200,100,0.15); color:#4ADE80; }
+.c-baixo::before { background:#4ADE80; }
+.c-medio     { background:rgba(232,209,25,0.15); color:#FFD700; }
+.c-medio::before { background:#FFD700; }
+.c-alto      { background:rgba(232,25,60,0.2); color:#FF6B85; }
+.c-alto::before { background:#FF6B85; }
+
+.tag {
+  display:inline-block;
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:5px; padding:2px 8px;
+  font-size:11px; color:var(--cinza2); white-space:nowrap;
+}
+
+.seg-tag {
+  display:inline-flex; align-items:center; gap:4px;
+  padding:3px 8px; border-radius:5px;
+  font-size:11px; font-weight:600;
+}
+.seg-eletrica { background:rgba(255,215,0,0.15); color:#FFD700; }
+.seg-copa     { background:rgba(43,91,168,0.3); color:#7EB3FF; }
+.seg-limpeza  { background:rgba(25,200,100,0.15); color:#4ADE80; }
+.seg-admin    { background:rgba(232,25,60,0.15); color:#FF6B85; }
+
+/* MINI BAR */
+.bar-wrap { width:70px; height:5px; background:rgba(255,255,255,0.1); border-radius:3px; overflow:hidden; }
+.bar-fill { height:100%; border-radius:3px; }
+
+/* TABS */
+.tabs { display:flex; gap:3px; background:rgba(0,0,0,0.2); border-radius:9px; padding:3px; width:fit-content; margin-bottom:20px; }
+.tab {
+  padding:7px 16px; border-radius:7px; font-size:13px; font-weight:600;
+  cursor:pointer; color:var(--muted); background:none; border:none;
+  font-family:var(--font-body); transition:all .18s;
+}
+.tab.active { background:var(--vermelho); color:#fff; }
+.tab:not(.active):hover { color:#fff; background:rgba(255,255,255,0.07); }
+
+/* MODAL */
+.overlay {
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,0.65); z-index:200;
+  align-items:center; justify-content:center;
+  backdrop-filter:blur(4px);
+}
+.overlay.open { display:flex; }
+
+.modal {
+  background:var(--azul); border:1px solid var(--border);
+  border-radius:16px; width:500px; max-width:96vw;
+  animation:mIn .22s ease;
+}
+@keyframes mIn { from{transform:translateY(18px) scale(.97);opacity:0} to{transform:none;opacity:1} }
+
+.modal-hd {
+  padding:20px 22px 16px;
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.modal-title { font-family:var(--font-head); font-size:18px; font-weight:800; color:#fff; }
+.modal-x { background:none; border:none; color:var(--muted); font-size:20px; cursor:pointer; line-height:1; }
+.modal-x:hover { color:#fff; }
+
+.modal-bd { padding:20px 22px; }
+.modal-ft { padding:14px 22px 20px; display:flex; gap:10px; justify-content:flex-end; }
+
+.fg { margin-bottom:14px; }
+.fl { font-size:11px; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:0.8px; display:block; margin-bottom:5px; }
+.fi, .fs, .fta {
+  width:100%; background:rgba(0,0,0,0.25); border:1px solid var(--border);
+  border-radius:8px; padding:9px 13px; color:#fff;
+  font-family:var(--font-body); font-size:13px; outline:none;
+  transition:border-color .18s;
+}
+.fi:focus,.fs:focus,.fta:focus { border-color:var(--vermelho); }
+.fta { resize:vertical; min-height:72px; }
+.fr { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+select option { background:#1B3F72; }
+
+/* TOAST */
+.toast {
+  position:fixed; bottom:22px; right:22px;
+  background:var(--vermelho); color:#fff;
+  padding:12px 20px; border-radius:9px;
+  font-size:13px; font-weight:600; z-index:999;
+  transform:translateY(70px); opacity:0; transition:all .28s ease;
+  box-shadow:0 8px 24px rgba(232,25,60,0.4);
+}
+.toast.show { transform:none; opacity:1; }
+
+/* BTN EDIT */
+.btn-edit {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid var(--border);
+  color: var(--cinza2);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size:11px; font-weight:600;
+  cursor:pointer; transition:all .18s;
+  font-family:var(--font-body);
+  white-space:nowrap;
+}
+.btn-edit:hover { background:var(--vermelho); color:#fff; border-color:var(--vermelho); }
+
+/* SEÇÃO TITLE */
+.section-hd {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:16px;
+}
+.section-title {
+  font-family:var(--font-head); font-size:20px; font-weight:800;
+  color:#fff;
+}
+.section-title span { color:var(--vermelho); }
+
+/* CHART BARS */
+.chartbars {
+  display:flex; align-items:flex-end; gap:8px; height:90px; padding:16px 20px 0;
+}
+.cb-wrap { flex:1; display:flex; flex-direction:column; align-items:center; gap:5px; }
+.cb { width:100%; border-radius:4px 4px 0 0; transition:.2s; cursor:default; }
+.cb:hover { opacity:.8; }
+.cb-lbl { font-size:10px; color:var(--muted); }
+
+/* Perfil icons */
+.pf { display:inline-flex; align-items:center; gap:6px; }
+
+/* ESTOQUE CATEGORY HEADER */
+.cat-row td {
+  background:rgba(0,0,0,0.2) !important;
+  font-family:var(--font-head); font-weight:700; font-size:12px;
+  text-transform:uppercase; letter-spacing:1px;
+  color:var(--muted); padding:8px 16px !important;
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ SIDEBAR ═══════════ -->
+<aside class="sidebar">
+  <div class="logo-wrap">
+    <div class="logo-icon">
+      <svg width="26" height="20" viewBox="0 0 26 20" fill="none">
+        <path d="M2 4 Q8 0 14 4 Q20 8 24 4" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        <path d="M2 10 Q8 6 14 10 Q20 14 24 10" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        <path d="M2 16 Q8 12 14 16 Q20 20 24 16" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      </svg>
+    </div>
+    <div class="logo-text-wrap">
+      <div class="logo-name">eletrodata</div>
+      <div class="logo-sub">engenharia · erp</div>
+    </div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Geral</div>
+    <div class="nav-item active" onclick="go('dashboard',this)">
+      <span class="ni">📊</span><span>Dashboard</span>
+    </div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Chamados</div>
+    <div class="nav-item" onclick="go('chamados',this)">
+      <span class="ni">🎫</span><span>Todos os Chamados</span>
+      <span class="nav-badge">9</span>
+    </div>
+    <div class="nav-item" onclick="openModalChamado()">
+      <span class="ni">➕</span><span>Abrir Chamado</span>
+    </div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Estoque</div>
+    <div class="nav-item" onclick="go('estoque',this)">
+      <span class="ni">📦</span><span>Produtos</span>
+      <span class="nav-badge" style="background:rgba(255,165,0,0.3);color:#FFA500">4</span>
+    </div>
+    <div class="nav-item" onclick="go('movimentacoes',this)">
+      <span class="ni">🔄</span><span>Movimentações</span>
+    </div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Administração</div>
+    <div class="nav-item" onclick="go('equipe',this)">
+      <span class="ni">👥</span><span>Equipe</span>
+    </div>
+  </div>
+
+  <div class="sidebar-bottom">
+    <div class="user-card">
+      <div class="avatar" style="background:var(--vermelho)">TG</div>
+      <div>
+        <div class="user-name">Thaylana G.</div>
+        <div class="user-role">Gerente de RH</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ═══════════ MAIN ═══════════ -->
+<main class="main">
+  <header class="topbar">
+    <div class="topbar-title" id="ttl">Dashboard</div>
+    <div class="search">
+      <span style="color:var(--muted)">🔍</span>
+      <input type="text" placeholder="Buscar chamados, produtos...">
+    </div>
+    <button class="btn btn-ghost" onclick="go('estoque', document.querySelector(\'.nav-item:nth-child(1)\'))">📦 Estoque</button>
+    <button class="btn btn-red" onclick="openModalChamado()">+ Novo Chamado</button>
+  </header>
+
+  <div class="content">
+
+    <!-- ██ DASHBOARD ██ -->
+    <div class="panel active" id="p-dashboard">
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-stripe" style="background:var(--vermelho)"></div>
+          <div class="stat-label">Chamados Abertos</div>
+          <div class="stat-val" style="color:#FF6B85">9</div>
+          <div class="stat-desc"><b>3</b> elétrica · <b>4</b> limpeza · <b>2</b> copa</div>
+        </div>
+        <div class="stat">
+          <div class="stat-stripe" style="background:#FFD700"></div>
+          <div class="stat-label">Em Andamento</div>
+          <div class="stat-val" style="color:#FFD700">5</div>
+          <div class="stat-desc"><b>2</b> com prazo hoje</div>
+        </div>
+        <div class="stat">
+          <div class="stat-stripe" style="background:#4ADE80"></div>
+          <div class="stat-label">Resolvidos (mês)</div>
+          <div class="stat-val" style="color:#4ADE80">47</div>
+          <div class="stat-desc"><b>+18%</b> vs mês anterior</div>
+        </div>
+        <div class="stat">
+          <div class="stat-stripe" style="background:#FFA500"></div>
+          <div class="stat-label">Itens em Alerta</div>
+          <div class="stat-val" style="color:#FFA500">4</div>
+          <div class="stat-desc">Estoque abaixo do mínimo</div>
+        </div>
+      </div>
+
+      <div class="g2">
+        <!-- Chamados recentes -->
+        <div class="card">
+          <div class="card-hd">
+            <div class="card-title">🎫 Chamados Recentes</div>
+            <span class="card-link" onclick="go('chamados')">Ver todos →</span>
+          </div>
+          <table class="tbl">
+            <thead><tr><th>#</th><th>Título</th><th>Segmento</th><th>Status</th><th>Prioridade</th></tr></thead>
+            <tbody>
+              <tr><td style="color:var(--muted);font-size:11px">#0051</td><td>Disjuntor do 3º andar desarmando</td><td><span class="seg-tag seg-eletrica">⚡ Elétrica</span></td><td><span class="chip c-critico">Crítico</span></td><td><span class="chip c-alto">Alta</span></td></tr>
+              <tr><td style="color:var(--muted);font-size:11px">#0050</td><td>Reposição de café e açúcar</td><td><span class="seg-tag seg-copa">☕ Copa</span></td><td><span class="chip c-aberto">Aberto</span></td><td><span class="chip c-baixo">Baixa</span></td></tr>
+              <tr><td style="color:var(--muted);font-size:11px">#0049</td><td>Banheiro feminino sem papel higiênico</td><td><span class="seg-tag seg-limpeza">🧹 Limpeza</span></td><td><span class="chip c-andamento">Andamento</span></td><td><span class="chip c-medio">Média</span></td></tr>
+              <tr><td style="color:var(--muted);font-size:11px">#0048</td><td>Lâmpada queimada — sala de reunião</td><td><span class="seg-tag seg-eletrica">⚡ Elétrica</span></td><td><span class="chip c-andamento">Andamento</span></td><td><span class="chip c-medio">Média</span></td></tr>
+              <tr><td style="color:var(--muted);font-size:11px">#0047</td><td>Piso com mancha de óleo — garagem</td><td><span class="seg-tag seg-limpeza">🧹 Limpeza</span></td><td><span class="chip c-aberto">Aberto</span></td><td><span class="chip c-alto">Alta</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Estoque crítico + mini chart -->
+        <div class="card" style="margin-bottom:0">
+          <div class="card-hd">
+            <div class="card-title">📈 Chamados por Segmento</div>
+          </div>
+          <div class="chartbars">
+            <div class="cb-wrap"><div class="cb" style="height:55%;background:rgba(255,215,0,0.6)"></div><div class="cb-lbl">Jan</div></div>
+            <div class="cb-wrap"><div class="cb" style="height:70%;background:rgba(255,215,0,0.6)"></div><div class="cb-lbl">Fev</div></div>
+            <div class="cb-wrap"><div class="cb" style="height:45%;background:rgba(255,215,0,0.6)"></div><div class="cb-lbl">Mar</div></div>
+            <div class="cb-wrap"><div class="cb" style="height:80%;background:rgba(255,215,0,0.6)"></div><div class="cb-lbl">Abr</div></div>
+            <div class="cb-wrap"><div class="cb" style="height:100%;background:var(--vermelho)"></div><div class="cb-lbl">Mai</div></div>
+          </div>
+          <div style="display:flex;gap:12px;padding:10px 20px 16px;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--cinza2)"><div style="width:8px;height:8px;background:#FFD700;border-radius:2px"></div>Elétrica: 28</div>
+            <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--cinza2)"><div style="width:8px;height:8px;background:#4ADE80;border-radius:2px"></div>Limpeza: 12</div>
+            <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--cinza2)"><div style="width:8px;height:8px;background:#7EB3FF;border-radius:2px"></div>Copa: 7</div>
+          </div>
+
+          <div style="border-top:1px solid var(--border)">
+            <div class="card-hd" style="border-bottom:none;padding-bottom:4px">
+              <div class="card-title" style="font-size:13px">⚠️ Estoque em Alerta</div>
+              <span class="card-link" onclick="go('estoque')">Ver →</span>
+            </div>
+            <table class="tbl">
+              <tbody>
+                <tr class="warn"><td>Disjuntor 20A</td><td><div class="bar-wrap"><div class="bar-fill" style="width:12%;background:#FF6B85"></div></div></td><td><span class="chip c-critico">2 un</span></td></tr>
+                <tr class="warn"><td>Café 500g</td><td><div class="bar-wrap"><div class="bar-fill" style="width:20%;background:#FFA500"></div></div></td><td><span class="chip c-alerta">1 pc</span></td></tr>
+                <tr class="warn"><td>Papel Higiênico (fardo)</td><td><div class="bar-wrap"><div class="bar-fill" style="width:15%;background:#FF6B85"></div></div></td><td><span class="chip c-critico">1 fd</span></td></tr>
+                <tr class="warn"><td>Álcool Gel 500ml</td><td><div class="bar-wrap"><div class="bar-fill" style="width:25%;background:#FFA500"></div></div></td><td><span class="chip c-alerta">2 un</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /dashboard -->
+
+    <!-- ██ CHAMADOS ██ -->
+    <div class="panel" id="p-chamados">
+      <div class="section-hd">
+        <div class="section-title">Fila de <span>Chamados</span></div>
+        <button class="btn btn-red" onclick="openModalChamado()">+ Novo Chamado</button>
+      </div>
+      <div class="tabs">
+        <button class="tab active" onclick="filtrarChamados('todos',this)">Todos (18)</button>
+        <button class="tab" onclick="filtrarChamados('aberto',this)">Abertos</button>
+        <button class="tab" onclick="filtrarChamados('andamento',this)">Em Andamento</button>
+        <button class="tab" onclick="filtrarChamados('fechado',this)">Fechados</button>
+        <button class="tab" onclick="filtrarChamados('critico',this)">Críticos</button>
+      </div>
+      <div class="card">
+        <table class="tbl">
+          <thead><tr><th>#</th><th>Título</th><th>Segmento</th><th>Local/Setor</th><th>Responsável</th><th>Prioridade</th><th>Status</th><th>Data</th></tr></thead>
+          <tbody id="tb-chamados"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ██ ESTOQUE ██ -->
+    <div class="panel" id="p-estoque">
+      <div class="section-hd">
+        <div class="section-title">Controle de <span>Estoque</span></div>
+        <button class="btn btn-red" onclick="openModalEstoque()">+ Registrar Movimentação</button>
+      </div>
+      <div class="g3" style="margin-bottom:20px">
+        <div class="stat" style="margin-bottom:0"><div class="stat-stripe" style="background:#4ADE80"></div><div class="stat-label">Total de Itens</div><div class="stat-val" style="color:#4ADE80;font-size:28px">84</div><div class="stat-desc">3 segmentos</div></div>
+        <div class="stat" style="margin-bottom:0"><div class="stat-stripe" style="background:#FFA500"></div><div class="stat-label">Em Alerta</div><div class="stat-val" style="color:#FFA500;font-size:28px">4</div><div class="stat-desc">Reposição necessária</div></div>
+        <div class="stat" style="margin-bottom:0"><div class="stat-stripe" style="background:#7EB3FF"></div><div class="stat-label">Movimentações Hoje</div><div class="stat-val" style="color:#7EB3FF;font-size:28px">11</div><div class="stat-desc">7 saídas · 4 entradas</div></div>
+      </div>
+      <div class="card">
+        <table class="tbl" id="tbl-estoque">
+          <thead><tr><th>Código</th><th>Produto</th><th>Segmento</th><th>Qtd</th><th>Mín.</th><th>Unid.</th><th>Localização</th><th>Status</th><th>Ações</th></tr></thead>
+          <tbody id="tb-estoque"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ██ MOVIMENTAÇÕES ██ -->
+    <div class="panel" id="p-movimentacoes">
+      <div class="section-hd">
+        <div class="section-title"><span>Movimentações</span> de Estoque</div>
+      </div>
+      <div class="card">
+        <table class="tbl">
+          <thead><tr><th>Data</th><th>Produto</th><th>Segmento</th><th>Tipo</th><th>Qtd</th><th>Responsável</th><th>Chamado</th><th>Observação</th></tr></thead>
+          <tbody>
+            <tr><td style="color:var(--muted);font-size:11px">21/05/26</td><td>Disjuntor 20A</td><td><span class="seg-tag seg-eletrica">⚡</span></td><td><span class="chip c-critico">Saída</span></td><td>2</td><td>Leandro Viana</td><td><span class="tag">#0051</span></td><td style="color:var(--muted);font-size:12px">Troca quadro 3º and.</td></tr>
+            <tr><td style="color:var(--muted);font-size:11px">21/05/26</td><td>Café 500g</td><td><span class="seg-tag seg-copa">☕</span></td><td><span class="chip c-fechado">Entrada</span></td><td>5</td><td>Honda M.</td><td>—</td><td style="color:var(--muted);font-size:12px">Compra NF 7821</td></tr>
+            <tr><td style="color:var(--muted);font-size:11px">20/05/26</td><td>Papel Higiênico (fardo)</td><td><span class="seg-tag seg-limpeza">🧹</span></td><td><span class="chip c-critico">Saída</span></td><td>3</td><td>Carla Nunes</td><td><span class="tag">#0049</span></td><td style="color:var(--muted);font-size:12px">Reabastecimento banh.</td></tr>
+            <tr><td style="color:var(--muted);font-size:11px">20/05/26</td><td>Luva Isolante 1000V</td><td><span class="seg-tag seg-eletrica">⚡</span></td><td><span class="chip c-fechado">Entrada</span></td><td>4</td><td>Leandro Viana</td><td>—</td><td style="color:var(--muted);font-size:12px">Compra NF 7819</td></tr>
+            <tr><td style="color:var(--muted);font-size:11px">19/05/26</td><td>Detergente 500ml</td><td><span class="seg-tag seg-limpeza">🧹</span></td><td><span class="chip c-critico">Saída</span></td><td>6</td><td>Renata Souza</td><td><span class="tag">#0047</span></td><td style="color:var(--muted);font-size:12px">Limpeza garagem</td></tr>
+            <tr><td style="color:var(--muted);font-size:11px">19/05/26</td><td>Copo Descartável 180ml (cx)</td><td><span class="seg-tag seg-copa">☕</span></td><td><span class="chip c-critico">Saída</span></td><td>2</td><td>Patrícia Gomes</td><td><span class="tag">#0050</span></td><td style="color:var(--muted);font-size:12px">Abastec. copa 2º and.</td></tr>
+            <tr><td style="color:var(--muted);font-size:11px">18/05/26</td><td>Fita Isolante 20m</td><td><span class="seg-tag seg-eletrica">⚡</span></td><td><span class="chip c-critico">Saída</span></td><td>3</td><td>Roberto Dias</td><td><span class="tag">#0048</span></td><td style="color:var(--muted);font-size:12px">Manutenção lâmpadas</td></tr>
+            <tr><td style="color:var(--muted);font-size:11px">18/05/26</td><td>Álcool Gel 500ml</td><td><span class="seg-tag seg-limpeza">🧹</span></td><td><span class="chip c-fechado">Entrada</span></td><td>12</td><td>Honda M.</td><td>—</td><td style="color:var(--muted);font-size:12px">Compra NF 7805</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ██ EQUIPE ██ -->
+    <div class="panel" id="p-equipe">
+      <div class="section-hd">
+        <div class="section-title">Gestão de <span>Equipe</span></div>
+        <button class="btn btn-ghost">+ Novo Colaborador</button>
+      </div>
+      <div class="card">
+        <table class="tbl">
+          <thead><tr><th>Colaborador</th><th>E-mail</th><th>Cargo</th><th>Equipe</th><th>Status</th><th>Ações</th></tr></thead>
+          <tbody id="tb-equipe"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<!-- MODAL CHAMADO -->
+<div class="overlay" id="ov-chamado">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-title">🎫 Abrir Novo Chamado</div>
+      <button class="modal-x" onclick="closeModal('ov-chamado')">✕</button>
+    </div>
+    <div class="modal-bd">
+      <div class="fg"><label class="fl">Título do Chamado</label><input class="fi" id="ch-titulo" type="text" placeholder="Descreva o problema resumidamente"></div>
+      <div class="fr">
+        <div class="fg"><label class="fl">Segmento</label>
+          <select class="fs" id="ch-seg" onchange="atualizarCategorias()">
+            <option value="eletrica">⚡ Manutenção Elétrica</option>
+            <option value="limpeza">🧹 Serviços de Limpeza</option>
+            <option value="copa">☕ Copa</option>
+            <option value="admin">🏢 Administrativo</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl">Categoria</label>
+          <select class="fs" id="ch-cat">
+            <option>Falha em disjuntor</option>
+            <option>Lâmpada queimada</option>
+            <option>Tomada sem energia</option>
+            <option>Curto-circuito</option>
+            <option>Instalação elétrica</option>
+          </select>
+        </div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label class="fl">Local / Setor</label>
+          <select class="fs" id="ch-local">
+            <option>Térreo</option><option>1º Andar</option><option>2º Andar</option><option>3º Andar</option>
+            <option>Garagem</option><option>Copa Central</option><option>Banheiro Masc.</option><option>Banheiro Fem.</option><option>Sala de Reunião</option><option>Recepção</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl">Prioridade</label>
+          <select class="fs" id="ch-prio"><option>Baixa</option><option>Média</option><option selected>Alta</option><option>Crítica</option></select>
+        </div>
+      </div>
+      <div class="fg"><label class="fl">Responsável</label>
+        <select class="fs" id="ch-resp">
+          <option>Leandro Viana (Ger. Técnico)</option>
+          <option>Roberto Dias (Encarregado Elétrica)</option>
+          <option>Carla Nunes (Encarregada Limpeza)</option>
+          <option>Patrícia Gomes (Encarregada Copa)</option>
+        </select>
+      </div>
+      <div class="fg"><label class="fl">Descrição</label><textarea class="fta" id="ch-desc" placeholder="Descreva o problema com detalhes..."></textarea></div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="closeModal('ov-chamado')">Cancelar</button>
+      <button class="btn btn-red" onclick="salvarChamado()">Abrir Chamado</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ESTOQUE -->
+<div class="overlay" id="ov-estoque">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-title">📦 Registrar Movimentação</div>
+      <button class="modal-x" onclick="closeModal('ov-estoque')">✕</button>
+    </div>
+    <div class="modal-bd">
+      <div class="fg"><label class="fl">Segmento</label>
+        <select class="fs"><option>⚡ Elétrica</option><option>🧹 Limpeza</option><option>☕ Copa</option></select>
+      </div>
+      <div class="fg"><label class="fl">Produto</label>
+        <select class="fs">
+          <option>Selecione...</option>
+          <option>Disjuntor 20A</option><option>Cabo PP 2x2,5mm</option><option>Fita Isolante 20m</option>
+          <option>Café 500g</option><option>Açúcar 1kg</option><option>Copo 180ml (cx)</option>
+          <option>Papel Higiênico (fardo)</option><option>Detergente 500ml</option><option>Álcool Gel 500ml</option>
+        </select>
+      </div>
+      <div class="fr">
+        <div class="fg"><label class="fl">Tipo</label>
+          <select class="fs"><option>Entrada (Compra)</option><option>Entrada (Devolução)</option><option>Saída (Uso Interno)</option><option>Saída (Chamado)</option></select>
+        </div>
+        <div class="fg"><label class="fl">Quantidade</label><input class="fi" type="number" min="1" placeholder="0"></div>
+      </div>
+      <div class="fg"><label class="fl">Referência (NF ou Chamado)</label><input class="fi" type="text" placeholder="Ex: NF 7821 ou #0051"></div>
+      <div class="fg"><label class="fl">Observação</label><textarea class="fta" placeholder="Observações adicionais..."></textarea></div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="closeModal('ov-estoque')">Cancelar</button>
+      <button class="btn btn-red" onclick="salvarEstoque()">Registrar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- MODAL EDITAR MEMBRO -->
+<div class="overlay" id="ov-edit-membro">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-title">✏️ Editar Colaborador</div>
+      <button class="modal-x" onclick="closeModal('ov-edit-membro')">✕</button>
+    </div>
+    <div class="modal-bd">
+      <div class="fg"><label class="fl">Nome Completo</label><input class="fi" id="em-nome" type="text"></div>
+      <div class="fg"><label class="fl">E-mail</label><input class="fi" id="em-email" type="email"></div>
+      <div class="fg"><label class="fl">Cargo</label><input class="fi" id="em-cargo" type="text"></div>
+      <div class="fg"><label class="fl">Equipe</label>
+        <select class="fs" id="em-equipe">
+          <option value="RH">RH</option>
+          <option value="Elétrica">Elétrica</option>
+          <option value="Copa">Copa</option>
+          <option value="Limpeza">Limpeza</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="closeModal('ov-edit-membro')">Cancelar</button>
+      <button class="btn btn-red" onclick="salvarMembro()">Salvar Alterações</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR PRODUTO -->
+<div class="overlay" id="ov-edit-produto">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-title">✏️ Editar Produto</div>
+      <button class="modal-x" onclick="closeModal('ov-edit-produto')">✕</button>
+    </div>
+    <div class="modal-bd">
+      <div class="fg"><label class="fl">Nome do Produto</label><input class="fi" id="ep-nome" type="text"></div>
+      <div class="fr">
+        <div class="fg"><label class="fl">Quantidade Atual</label><input class="fi" id="ep-qtd" type="number" min="0"></div>
+        <div class="fg"><label class="fl">Quantidade Mínima</label><input class="fi" id="ep-min" type="number" min="1"></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label class="fl">Unidade</label><input class="fi" id="ep-und" type="text" placeholder="un, cx, fd..."></div>
+        <div class="fg"><label class="fl">Segmento</label>
+          <select class="fs" id="ep-seg">
+            <option value="eletrica">⚡ Elétrica</option>
+            <option value="copa">☕ Copa</option>
+            <option value="limpeza">🧹 Limpeza</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg"><label class="fl">Localização</label><input class="fi" id="ep-local" type="text" placeholder="Ex: Almox. A-01"></div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="closeModal('ov-edit-produto')">Cancelar</button>
+      <button class="btn btn-red" onclick="salvarProduto()">Salvar Alterações</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+const chamadosDB = [
+  {id:'0051',titulo:'Disjuntor do 3º andar desarmando',seg:'eletrica',local:'3º Andar',resp:'Roberto Dias',prio:'Crítica',status:'critico',data:'21/05/26'},
+  {id:'0050',titulo:'Reposição de café e açúcar',seg:'copa',local:'Copa Central',resp:'Patrícia Gomes',prio:'Baixa',status:'aberto',data:'21/05/26'},
+  {id:'0049',titulo:'Banheiro feminino sem papel higiênico',seg:'limpeza',local:'Banheiro Fem.',resp:'Carla Nunes',prio:'Média',status:'andamento',data:'21/05/26'},
+  {id:'0048',titulo:'Lâmpada queimada — sala de reunião',seg:'eletrica',local:'Sala de Reunião',resp:'Marcos Eletricista',prio:'Média',status:'andamento',data:'20/05/26'},
+  {id:'0047',titulo:'Piso com mancha de óleo — garagem',seg:'limpeza',local:'Garagem',resp:'Carla Nunes',prio:'Alta',status:'aberto',data:'20/05/26'},
+  {id:'0046',titulo:'Tomada sem energia — sala 104',seg:'eletrica',local:'1º Andar',resp:'Roberto Dias',prio:'Alta',status:'aberto',data:'19/05/26'},
+  {id:'0045',titulo:'Copo d\'água acabou na recepção',seg:'copa',local:'Recepção',resp:'Patrícia Gomes',prio:'Média',status:'fechado',data:'19/05/26'},
+  {id:'0044',titulo:'Vidro do banheiro com sujeira acumulada',seg:'limpeza',local:'Banheiro Masc.',resp:'Fernanda ASG',prio:'Baixa',status:'fechado',data:'18/05/26'},
+  {id:'0043',titulo:'Cheiro de queimado no quadro elétrico',seg:'eletrica',local:'Térreo',resp:'Leandro Viana',prio:'Crítica',status:'fechado',data:'18/05/26'},
+  {id:'0042',titulo:'Falta sabão líquido — banheiro masc.',seg:'limpeza',local:'Banheiro Masc.',resp:'Carla Nunes',prio:'Média',status:'aberto',data:'17/05/26'},
+  {id:'0041',titulo:'Cafeteira com defeito — copa 2º andar',seg:'copa',local:'2º Andar',resp:'Patrícia Gomes',prio:'Média',status:'andamento',data:'17/05/26'},
+  {id:'0040',titulo:'Instalação de tomada 3 pinos',seg:'eletrica',local:'2º Andar',resp:'Roberto Dias',prio:'Baixa',status:'andamento',data:'16/05/26'},
+  {id:'0039',titulo:'Corredor sujo após obra',seg:'limpeza',local:'3º Andar',resp:'Fernanda ASG',prio:'Alta',status:'fechado',data:'15/05/26'},
+  {id:'0038',titulo:'Sem açúcar — copa 1º andar',seg:'copa',local:'1º Andar',resp:'Patrícia Gomes',prio:'Baixa',status:'fechado',data:'14/05/26'},
+  {id:'0037',titulo:'Iluminação de emergência falhou',seg:'eletrica',local:'Garagem',resp:'Leandro Viana',prio:'Alta',status:'fechado',data:'13/05/26'},
+  {id:'0036',titulo:'Descarga do banheiro com defeito',seg:'limpeza',local:'Banheiro Fem.',resp:'Carla Nunes',prio:'Média',status:'fechado',data:'13/05/26'},
+  {id:'0035',titulo:'Falta filtro de água — copa térreo',seg:'copa',local:'Térreo',resp:'Patrícia Gomes',prio:'Alta',status:'fechado',data:'12/05/26'},
+  {id:'0034',titulo:'Medição de aterramento — subestação',seg:'eletrica',local:'Térreo',resp:'Leandro Viana',prio:'Alta',status:'fechado',data:'11/05/26'},
+];
+
+const estoqueDB = [
+  // ELÉTRICA
+  {cod:'ELT-001',nome:'Disjuntor 20A',seg:'eletrica',qtd:2,min:10,und:'un',local:'Almox. A-01',status:'critico'},
+  {cod:'ELT-002',nome:'Disjuntor 32A',seg:'eletrica',qtd:8,min:5,und:'un',local:'Almox. A-01',status:'ok'},
+  {cod:'ELT-003',nome:'Cabo PP 2x2,5mm (rolo 100m)',seg:'eletrica',qtd:3,min:2,und:'rl',local:'Almox. A-02',status:'ok'},
+  {cod:'ELT-004',nome:'Cabo Flexível 4mm² (rolo)',seg:'eletrica',qtd:5,min:2,und:'rl',local:'Almox. A-02',status:'ok'},
+  {cod:'ELT-005',nome:'Fita Isolante 20m',seg:'eletrica',qtd:14,min:10,und:'un',local:'Almox. A-03',status:'ok'},
+  {cod:'ELT-006',nome:'Luva Isolante 1000V',seg:'eletrica',qtd:4,min:2,und:'par',local:'Almox. A-03',status:'ok'},
+  {cod:'ELT-007',nome:'Lâmpada LED 12W',seg:'eletrica',qtd:22,min:10,und:'un',local:'Almox. A-04',status:'ok'},
+  {cod:'ELT-008',nome:'Tomada 2P+T Universal',seg:'eletrica',qtd:18,min:8,und:'un',local:'Almox. A-04',status:'ok'},
+  {cod:'ELT-009',nome:'Eletroduto PVC 3/4\" (vara)',seg:'eletrica',qtd:10,min:5,und:'vr',local:'Almox. A-05',status:'ok'},
+  {cod:'ELT-010',nome:'Multímetro Digital',seg:'eletrica',qtd:2,min:2,und:'un',local:'Sala Técnica',status:'ok'},
+  // COPA
+  {cod:'COP-001',nome:'Café 500g',seg:'copa',qtd:1,min:5,und:'pc',local:'Copa Almox.',status:'alerta'},
+  {cod:'COP-002',nome:'Açúcar Cristal 1kg',seg:'copa',qtd:6,min:4,und:'pc',local:'Copa Almox.',status:'ok'},
+  {cod:'COP-003',nome:'Copo Descartável 180ml (cx 100un)',seg:'copa',qtd:8,min:5,und:'cx',local:'Copa Almox.',status:'ok'},
+  {cod:'COP-004',nome:'Copo para Água 200ml (cx)',seg:'copa',qtd:4,min:3,und:'cx',local:'Copa Almox.',status:'ok'},
+  {cod:'COP-005',nome:'Adoçante Líquido 100ml',seg:'copa',qtd:3,min:2,und:'fr',local:'Copa Almox.',status:'ok'},
+  {cod:'COP-006',nome:'Filtro de Papel para Café (cx)',seg:'copa',qtd:5,min:2,und:'cx',local:'Copa Almox.',status:'ok'},
+  {cod:'COP-007',nome:'Chá de Ervas (cx 10 saquinhos)',seg:'copa',qtd:4,min:2,und:'cx',local:'Copa Almox.',status:'ok'},
+  {cod:'COP-008',nome:'Guardanapo de Papel (pc 100un)',seg:'copa',qtd:10,min:4,und:'pc',local:'Copa Almox.',status:'ok'},
+  // LIMPEZA
+  {cod:'LMP-001',nome:'Papel Higiênico Folha Dupla (fardo 64un)',seg:'limpeza',qtd:1,min:4,und:'fd',local:'Almox. B-01',status:'critico'},
+  {cod:'LMP-002',nome:'Papel Toalha Interfolha (fardo)',seg:'limpeza',qtd:6,min:3,und:'fd',local:'Almox. B-01',status:'ok'},
+  {cod:'LMP-003',nome:'Detergente Neutro 500ml',seg:'limpeza',qtd:12,min:8,und:'un',local:'Almox. B-02',status:'ok'},
+  {cod:'LMP-004',nome:'Desinfetante 2L',seg:'limpeza',qtd:8,min:4,und:'un',local:'Almox. B-02',status:'ok'},
+  {cod:'LMP-005',nome:'Sabão Líquido 5L',seg:'limpeza',qtd:3,min:2,und:'gl',local:'Almox. B-02',status:'ok'},
+  {cod:'LMP-006',nome:'Álcool Gel 500ml',seg:'limpeza',qtd:2,min:6,und:'un',local:'Almox. B-03',status:'alerta'},
+  {cod:'LMP-007',nome:'Pano de Chão (un)',seg:'limpeza',qtd:14,min:6,und:'un',local:'Almox. B-03',status:'ok'},
+  {cod:'LMP-008',nome:'Rodo 60cm',seg:'limpeza',qtd:6,min:3,und:'un',local:'Almox. B-03',status:'ok'},
+  {cod:'LMP-009',nome:'Vassoura Nylon',seg:'limpeza',qtd:8,min:4,und:'un',local:'Almox. B-03',status:'ok'},
+  {cod:'LMP-010',nome:'Saco de Lixo 100L (rl 10un)',seg:'limpeza',qtd:20,min:10,und:'rl',local:'Almox. B-04',status:'ok'},
+  {cod:'LMP-011',nome:'Luva de Borracha (par)',seg:'limpeza',qtd:10,min:5,und:'par',local:'Almox. B-04',status:'ok'},
+  {cod:'LMP-012',nome:'Limpador Multiuso 500ml',seg:'limpeza',qtd:9,min:4,und:'un',local:'Almox. B-04',status:'ok'},
+];
+
+const equipeDB = [
+  // RH
+  {nome:'Thaylana Guimarães',email:'thaylana@eletrodata.com.br',cargo:'Gerente de RH',equipe:'RH',cor:'#E8193C',ini:'TG'},
+  {nome:'Hanna Minamoto',email:'hanna.m@eletrodata.com.br',cargo:'Assistente de RH',equipe:'RH',cor:'#CC3350',ini:'HM'},
+  {nome:'Juliana Farias',email:'juliana.f@eletrodata.com.br',cargo:'Auxiliar de RH',equipe:'RH',cor:'#B02040',ini:'JF'},
+  // ENGENHARIA / ELÉTRICA
+  {nome:'Leandro Viana',email:'leandro.v@eletrodata.com.br',cargo:'Gerente Técnico (Eng. Elétrico)',equipe:'Elétrica',cor:'#1B5E9C',ini:'LV'},
+  {nome:'Roberto Dias',email:'roberto.d@eletrodata.com.br',cargo:'Encarregado de Manutenção',equipe:'Elétrica',cor:'#2266AA',ini:'RD'},
+  {nome:'Marcos Tavares',email:'marcos.t@eletrodata.com.br',cargo:'Eletricista',equipe:'Elétrica',cor:'#2877BB',ini:'MT'},
+  {nome:'Rafael Cunha',email:'rafael.c@eletrodata.com.br',cargo:'Eletricista',equipe:'Elétrica',cor:'#3388CC',ini:'RC'},
+  {nome:'Diego Santana',email:'diego.s@eletrodata.com.br',cargo:'Ajudante de Eletricista',equipe:'Elétrica',cor:'#44AADD',ini:'DS'},
+  {nome:'Felipe Moreira',email:'felipe.m@eletrodata.com.br',cargo:'Ajudante de Eletricista',equipe:'Elétrica',cor:'#55BBEE',ini:'FM'},
+  // COPA
+  {nome:'Patrícia Gomes',email:'patricia.g@eletrodata.com.br',cargo:'Encarregada de Copa',equipe:'Copa',cor:'#1E7A5A',ini:'PG'},
+  {nome:'Sandra Lima',email:'sandra.l@eletrodata.com.br',cargo:'Copeira',equipe:'Copa',cor:'#228866',ini:'SL'},
+  {nome:'Beatriz Alves',email:'beatriz.a@eletrodata.com.br',cargo:'Copeira',equipe:'Copa',cor:'#2A9970',ini:'BA'},
+  {nome:'Cintia Rocha',email:'cintia.r@eletrodata.com.br',cargo:'Copeira',equipe:'Copa',cor:'#33AA80',ini:'CR'},
+  // LIMPEZA / SERV. GERAIS
+  {nome:'Carla Nunes',email:'carla.n@eletrodata.com.br',cargo:'Encarregada de Serv. Gerais',equipe:'Limpeza',cor:'#8B5E1E',ini:'CN'},
+  {nome:'Fernanda Souza',email:'fernanda.s@eletrodata.com.br',cargo:'Auxiliar de Serviços Gerais',equipe:'Limpeza',cor:'#9A6A28',ini:'FS'},
+  {nome:'Renata Costa',email:'renata.c@eletrodata.com.br',cargo:'Auxiliar de Serviços Gerais',equipe:'Limpeza',cor:'#AA7733',ini:'RC'},
+  {nome:'Maria Oliveira',email:'maria.o@eletrodata.com.br',cargo:'Auxiliar de Serviços Gerais',equipe:'Limpeza',cor:'#BB8844',ini:'MO'},
+  {nome:'Joana Ferreira',email:'joana.f@eletrodata.com.br',cargo:'Auxiliar de Serviços Gerais',equipe:'Limpeza',cor:'#CC9955',ini:'JF'},
+];
+
+// ── RENDER HELPERS ──
+const segTag = {
+  eletrica: '<span class="seg-tag seg-eletrica">⚡ Elétrica</span>',
+  limpeza:  '<span class="seg-tag seg-limpeza">🧹 Limpeza</span>',
+  copa:     '<span class="seg-tag seg-copa">☕ Copa</span>',
+  admin:    '<span class="seg-tag seg-admin">🏢 Admin</span>',
+};
+const prioChip = {Baixa:'c-baixo',Média:'c-medio',Alta:'c-alto',Crítica:'c-critico'};
+const stChip   = {aberto:'c-aberto',andamento:'c-andamento',fechado:'c-fechado',critico:'c-critico'};
+const stLabel  = {aberto:'Aberto',andamento:'Andamento',fechado:'Fechado',critico:'Crítico'};
+
+function renderChamados(data){
+  document.getElementById('tb-chamados').innerHTML = data.map(c=>`
+    <tr>
+      <td style="color:var(--muted);font-size:11px">#${c.id}</td>
+      <td>${c.titulo}</td>
+      <td>${segTag[c.seg]||''}</td>
+      <td><span class="tag">${c.local}</span></td>
+      <td style="font-size:12px">${c.resp}</td>
+      <td><span class="chip ${prioChip[c.prio]}">${c.prio}</span></td>
+      <td><span class="chip ${stChip[c.status]}">${stLabel[c.status]}</span></td>
+      <td style="color:var(--muted);font-size:11px">${c.data}</td>
+    </tr>`).join('');
+}
+
+function renderEstoque(){
+  const grupos = {eletrica:'⚡ Manutenção Elétrica',copa:'☕ Copa',limpeza:'🧹 Serviços de Limpeza'};
+  let html = '';
+  ['eletrica','copa','limpeza'].forEach(seg=>{
+    html += `<tr class="cat-row"><td colspan="9">${grupos[seg]}</td></tr>`;
+    estoqueDB.filter(e=>e.seg===seg).forEach((e)=>{
+      const idx = estoqueDB.indexOf(e);
+      const bar = e.status==='critico'?'#FF6B85':e.status==='alerta'?'#FFA500':'#4ADE80';
+      const cls = e.status==='critico'?'c-critico':e.status==='alerta'?'c-alerta':'c-ok';
+      html += `<tr ${e.status!=='ok'?'class="warn"':''}>
+        <td style="color:var(--muted);font-size:11px">${e.cod}</td>
+        <td>${e.nome}</td>
+        <td>${segTag[e.seg]}</td>
+        <td style="font-weight:600;color:${e.status!=='ok'?bar:'inherit'}">${e.qtd}</td>
+        <td style="color:var(--muted)">${e.min}</td>
+        <td style="color:var(--muted)">${e.und}</td>
+        <td><span class="tag">${e.local}</span></td>
+        <td><span class="chip ${cls}">${e.status.charAt(0).toUpperCase()+e.status.slice(1)}</span></td>
+        <td><button class="btn-edit" onclick="editarProduto(${idx})">✏️ Editar</button></td>
+      </tr>`;
+    });
+  });
+  document.getElementById('tb-estoque').innerHTML = html;
+}
+
+function renderEquipe(){
+  const corEquipe = {RH:'seg-admin',Elétrica:'seg-eletrica',Copa:'seg-copa',Limpeza:'seg-limpeza'};
+  document.getElementById('tb-equipe').innerHTML = equipeDB.map((p,i)=>`
+    <tr>
+      <td><div style="display:flex;align-items:center;gap:10px">
+        <div class="avatar" style="background:${p.cor};width:30px;height:30px;font-size:11px">${p.ini}</div>
+        <span style="font-weight:500">${p.nome}</span>
+      </div></td>
+      <td style="color:var(--muted);font-size:12px">${p.email}</td>
+      <td style="font-size:13px">${p.cargo}</td>
+      <td><span class="seg-tag ${corEquipe[p.equipe]||'seg-admin'}">${p.equipe}</span></td>
+      <td><span class="chip c-fechado">Ativo</span></td>
+      <td><button class="btn-edit" onclick="editarMembro(${i})">✏️ Editar</button></td>
+    </tr>`).join('');
+}
+
+// ── NAV ──
+const panelMap = {dashboard:'p-dashboard',chamados:'p-chamados',estoque:'p-estoque',movimentacoes:'p-movimentacoes',equipe:'p-equipe'};
+const titleMap = {dashboard:'Dashboard',chamados:'Chamados',estoque:'Estoque',movimentacoes:'Movimentações',equipe:'Equipe'};
+
+function go(page, el){
+  Object.values(panelMap).forEach(p=>{ const el=document.getElementById(p); if(el) el.classList.remove('active'); });
+  const panel = document.getElementById(panelMap[page]);
+  if(panel) panel.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(el && el.classList) el.classList.add('active');
+  document.getElementById('ttl').textContent = titleMap[page]||page;
+  if(page==='chamados') renderChamados(chamadosDB);
+  if(page==='estoque') renderEstoque();
+  if(page==='equipe') renderEquipe();
+}
+
+function filtrarChamados(f,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const data = f==='todos' ? chamadosDB : chamadosDB.filter(c=>c.status===f);
+  renderChamados(data);
+}
+
+// ── CATEGORIAS POR SEGMENTO ──
+const cats = {
+  eletrica:['Falha em disjuntor','Lâmpada queimada','Tomada sem energia','Curto-circuito','Instalação elétrica','Medição / Teste','Cheiro de queimado','Quadro elétrico'],
+  limpeza:['Banheiro sem suprimentos','Limpeza urgente','Descarte de lixo','Piso escorregadio','Vidro/janela suja','Odor desagradável','Dedetização'],
+  copa:['Reposição de café','Reposição de açúcar','Falta de copos','Equipamento com defeito','Falta de água','Limpeza da copa'],
+  admin:['Solicitação geral','Manutenção predial','Outros'],
+};
+
+function atualizarCategorias(){
+  const seg = document.getElementById('ch-seg').value;
+  const sel = document.getElementById('ch-cat');
+  sel.innerHTML = cats[seg].map(c=>`<option>${c}</option>`).join('');
+}
+
+// ── MODALS ──
+function openModalChamado(){ document.getElementById('ov-chamado').classList.add('open'); }
+function openModalEstoque(){ document.getElementById('ov-estoque').classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+
+document.getElementById('ov-chamado').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeModal('ov-chamado'); });
+document.getElementById('ov-estoque').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeModal('ov-estoque'); });
+
+let chCount = 51;
+function salvarChamado(){
+  const titulo = document.getElementById('ch-titulo').value.trim();
+  if(!titulo){ document.getElementById('ch-titulo').focus(); return; }
+  chCount++;
+  chamadosDB.unshift({
+    id: String(chCount).padStart(4,'0'),
+    titulo,
+    seg: document.getElementById('ch-seg').value,
+    local: document.getElementById('ch-local').value,
+    resp: document.getElementById('ch-resp').value.split(' (')[0],
+    prio: document.getElementById('ch-prio').value,
+    status:'aberto',
+    data:'22/05/26'
+  });
+  closeModal('ov-chamado');
+  document.getElementById('ch-titulo').value='';
+  document.getElementById('ch-desc').value='';
+  toast(`✅ Chamado #${String(chCount).padStart(4,'0')} aberto com sucesso!`);
+  go('chamados');
+}
+
+function salvarEstoque(){
+  closeModal('ov-estoque');
+  toast('✅ Movimentação registrada com sucesso!');
+}
+
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 3200);
+}
+
+// ── EDIT MEMBRO ──
+let editMembroIdx = -1;
+function editarMembro(i){
+  editMembroIdx = i;
+  const p = equipeDB[i];
+  document.getElementById('em-nome').value = p.nome;
+  document.getElementById('em-email').value = p.email;
+  document.getElementById('em-cargo').value = p.cargo;
+  document.getElementById('em-equipe').value = p.equipe;
+  document.getElementById('ov-edit-membro').classList.add('open');
+}
+function salvarMembro(){
+  const p = equipeDB[editMembroIdx];
+  p.nome  = document.getElementById('em-nome').value.trim() || p.nome;
+  p.email = document.getElementById('em-email').value.trim() || p.email;
+  p.cargo = document.getElementById('em-cargo').value.trim() || p.cargo;
+  p.equipe= document.getElementById('em-equipe').value;
+  // update initials
+  const parts = p.nome.split(' ');
+  p.ini = (parts[0][0]+(parts[1]?parts[1][0]:'')).toUpperCase();
+  closeModal('ov-edit-membro');
+  renderEquipe();
+  toast('✅ Colaborador atualizado com sucesso!');
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('ov-edit-membro').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeModal('ov-edit-membro'); });
+  document.getElementById('ov-edit-produto').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeModal('ov-edit-produto'); });
+});
+
+// ── EDIT PRODUTO ──
+let editProdIdx = -1;
+function editarProduto(i){
+  editProdIdx = i;
+  const e = estoqueDB[i];
+  document.getElementById('ep-nome').value  = e.nome;
+  document.getElementById('ep-qtd').value   = e.qtd;
+  document.getElementById('ep-min').value   = e.min;
+  document.getElementById('ep-und').value   = e.und;
+  document.getElementById('ep-local').value = e.local;
+  document.getElementById('ep-seg').value   = e.seg;
+  document.getElementById('ov-edit-produto').classList.add('open');
+}
+function salvarProduto(){
+  const e = estoqueDB[editProdIdx];
+  e.nome  = document.getElementById('ep-nome').value.trim() || e.nome;
+  e.qtd   = parseInt(document.getElementById('ep-qtd').value) || e.qtd;
+  e.min   = parseInt(document.getElementById('ep-min').value) || e.min;
+  e.und   = document.getElementById('ep-und').value.trim() || e.und;
+  e.local = document.getElementById('ep-local').value.trim() || e.local;
+  e.seg   = document.getElementById('ep-seg').value;
+  // recalc status
+  if(e.qtd <= 0) e.status = 'critico';
+  else if(e.qtd < e.min) e.status = (e.qtd/e.min < 0.3) ? 'critico' : 'alerta';
+  else e.status = 'ok';
+  closeModal('ov-edit-produto');
+  renderEstoque();
+  toast('✅ Produto atualizado com sucesso!');
+}
+
+// init
+renderChamados(chamadosDB);
+renderEstoque();
+renderEquipe();
+</script>
+</body>
+</html>
