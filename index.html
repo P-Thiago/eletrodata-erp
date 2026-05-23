@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Eletrodata engenharia · demo v3 · Demo v3</title>
+<title>Eletrodata engenharia · demo v4 · Demo v4</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -503,7 +503,7 @@ select option { background:#1B3F72; }
     </div>
     <div class="logo-text-wrap">
       <div class="logo-name">eletrodata</div>
-      <div class="logo-sub">engenharia · demo v3</div>
+      <div class="logo-sub">engenharia · demo v4</div>
     </div>
   </div>
 
@@ -533,6 +533,20 @@ select option { background:#1B3F72; }
     </div>
     <div class="nav-item" onclick="go('movimentacoes',this)">
       <span class="ni">🔄</span><span>Movimentações</span>
+    </div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Viagens & Despesas</div>
+    <div class="nav-item" onclick="go('viagens',this)">
+      <span class="ni">✈️</span><span>Solicitações</span>
+      <span class="nav-badge" style="background:rgba(255,165,0,0.3);color:#FFA500">3</span>
+    </div>
+    <div class="nav-item" onclick="go('despesas',this)">
+      <span class="ni">🧾</span><span>Prestação de Contas</span>
+    </div>
+    <div class="nav-item" onclick="go('viagem-dashboard',this)">
+      <span class="ni">💰</span><span>Custos de Viagem</span>
     </div>
   </div>
 
@@ -731,6 +745,109 @@ select option { background:#1B3F72; }
       </div>
     </div>
 
+    <!-- ██ VIAGENS ██ -->
+    <div class="panel" id="p-viagens">
+      <div class="section-hd">
+        <div class="section-title">Solicitações de <span>Viagem</span></div>
+        <button class="btn btn-red" onclick="openModalViagem()">+ Nova Solicitação</button>
+      </div>
+      <div class="tabs">
+        <button class="tab active" onclick="filtrarViagens('todas',this)">Todas (8)</button>
+        <button class="tab" onclick="filtrarViagens('pendente',this)">Aguardando Aprovação (3)</button>
+        <button class="tab" onclick="filtrarViagens('aprovada',this)">Aprovadas (3)</button>
+        <button class="tab" onclick="filtrarViagens('encerrada',this)">Encerradas (2)</button>
+      </div>
+      <div class="card">
+        <table class="tbl">
+          <thead><tr><th>#</th><th>Funcionário</th><th>Destino</th><th>Período</th><th>Motivo</th><th>Adiantamento</th><th>Status</th><th>Ações</th></tr></thead>
+          <tbody id="tb-viagens"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ██ DESPESAS ██ -->
+    <div class="panel" id="p-despesas">
+      <div class="section-hd">
+        <div class="section-title">Prestação de <span>Contas</span></div>
+        <button class="btn btn-red" onclick="openModalDespesa()">+ Registrar Despesa</button>
+      </div>
+      <div class="g3" style="margin-bottom:20px">
+        <div class="stat" style="margin-bottom:0"><div class="stat-stripe" style="background:#FF6B85"></div><div class="stat-label">Aguardando Análise</div><div class="stat-val" style="color:#FF6B85;font-size:28px">4</div><div class="stat-desc">NFs pendentes de aprovação</div></div>
+        <div class="stat" style="margin-bottom:0"><div class="stat-stripe" style="background:#4ADE80"></div><div class="stat-label">Aprovadas (mês)</div><div class="stat-val" style="color:#4ADE80;font-size:28px">R$ 8.240</div><div class="stat-desc">12 prestações aprovadas</div></div>
+        <div class="stat" style="margin-bottom:0"><div class="stat-stripe" style="background:#FFD700"></div><div class="stat-label">A Reembolsar</div><div class="stat-val" style="color:#FFD700;font-size:28px">R$ 1.380</div><div class="stat-desc">3 funcionários aguardando</div></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-title">🧾 Notas Fiscais e Despesas</div></div>
+        <table class="tbl">
+          <thead><tr><th>#</th><th>Funcionário</th><th>Viagem</th><th>Tipo</th><th>Valor</th><th>NF / Comprovante</th><th>Status</th><th>Ações</th></tr></thead>
+          <tbody id="tb-despesas"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ██ VIAGEM DASHBOARD ██ -->
+    <div class="panel" id="p-viagem-dashboard">
+      <div class="section-hd">
+        <div class="section-title">Custos de <span>Viagem</span></div>
+        <span style="font-size:12px;color:var(--muted)">Exercício 2026</span>
+      </div>
+      <div class="stats" style="margin-bottom:20px">
+        <div class="stat"><div class="stat-stripe" style="background:var(--vermelho)"></div><div class="stat-label">Total Gasto (ano)</div><div class="stat-val" style="color:#FF6B85">R$ 42.6k</div><div class="stat-desc">22 viagens realizadas</div></div>
+        <div class="stat"><div class="stat-stripe" style="background:#FFD700"></div><div class="stat-label">Maior Custo</div><div class="stat-val" style="color:#FFD700">Hospedagem</div><div class="stat-desc">48% do total</div></div>
+        <div class="stat"><div class="stat-stripe" style="background:#4ADE80"></div><div class="stat-label">Média por Viagem</div><div class="stat-val" style="color:#4ADE80">R$ 1.9k</div><div class="stat-desc">Diária média: R$ 320</div></div>
+        <div class="stat"><div class="stat-stripe" style="background:#7EB3FF"></div><div class="stat-label">Funcionários em Campo</div><div class="stat-val" style="color:#7EB3FF">3</div><div class="stat-desc">Atualmente deslocados</div></div>
+      </div>
+      <div class="g2">
+        <div class="card">
+          <div class="card-hd"><div class="card-title">📊 Gastos por Categoria (2026)</div></div>
+          <div style="padding:20px">
+            <div style="margin-bottom:14px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:5px;font-size:13px"><span>🏨 Hospedagem</span><span style="color:#7EB3FF;font-weight:600">R$ 20.448 (48%)</span></div>
+              <div style="background:rgba(255,255,255,0.08);border-radius:4px;height:8px"><div style="width:48%;background:#7EB3FF;height:100%;border-radius:4px"></div></div>
+            </div>
+            <div style="margin-bottom:14px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:5px;font-size:13px"><span>🍽️ Alimentação</span><span style="color:#4ADE80;font-weight:600">R$ 12.780 (30%)</span></div>
+              <div style="background:rgba(255,255,255,0.08);border-radius:4px;height:8px"><div style="width:30%;background:#4ADE80;height:100%;border-radius:4px"></div></div>
+            </div>
+            <div style="margin-bottom:14px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:5px;font-size:13px"><span>🚗 Transporte</span><span style="color:#FFD700;font-weight:600">R$ 6.390 (15%)</span></div>
+              <div style="background:rgba(255,255,255,0.08);border-radius:4px;height:8px"><div style="width:15%;background:#FFD700;height:100%;border-radius:4px"></div></div>
+            </div>
+            <div style="margin-bottom:14px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:5px;font-size:13px"><span>🔧 Material em campo</span><span style="color:#FFA500;font-weight:600">R$ 2.556 (6%)</span></div>
+              <div style="background:rgba(255,255,255,0.08);border-radius:4px;height:8px"><div style="width:6%;background:#FFA500;height:100%;border-radius:4px"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:5px;font-size:13px"><span>📦 Outros</span><span style="color:#FF6B85;font-weight:600">R$ 426 (1%)</span></div>
+              <div style="background:rgba(255,255,255,0.08);border-radius:4px;height:8px"><div style="width:1%;background:#FF6B85;height:100%;border-radius:4px"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><div class="card-title">👷 Top Funcionários em Viagem</div></div>
+          <table class="tbl">
+            <thead><tr><th>Funcionário</th><th>Viagens</th><th>Total Gasto</th></tr></thead>
+            <tbody>
+              <tr><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="background:#1B5E9C;width:28px;height:28px;font-size:10px">LV</div>Leandro Viana</div></td><td>8</td><td style="color:#4ADE80;font-weight:600">R$ 14.200</td></tr>
+              <tr><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="background:#2266AA;width:28px;height:28px;font-size:10px">RD</div>Roberto Dias</div></td><td>7</td><td style="color:#4ADE80;font-weight:600">R$ 12.800</td></tr>
+              <tr><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="background:#2877BB;width:28px;height:28px;font-size:10px">MT</div>Marcos Tavares</div></td><td>5</td><td style="color:#4ADE80;font-weight:600">R$ 9.400</td></tr>
+              <tr><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="background:#3388CC;width:28px;height:28px;font-size:10px">RC</div>Rafael Cunha</div></td><td>2</td><td style="color:#FFD700;font-weight:600">R$ 6.200</td></tr>
+            </tbody>
+          </table>
+          <div class="card-hd" style="border-top:1px solid var(--border);border-bottom:none;margin-top:4px"><div class="card-title" style="font-size:13px">📍 Destinos mais frequentes</div></div>
+          <table class="tbl">
+            <thead><tr><th>Cidade</th><th>Viagens</th><th>Gasto médio</th></tr></thead>
+            <tbody>
+              <tr><td>São Paulo - SP</td><td>8</td><td style="color:var(--muted)">R$ 2.100</td></tr>
+              <tr><td>Goiânia - GO</td><td>6</td><td style="color:var(--muted)">R$ 1.800</td></tr>
+              <tr><td>Belo Horizonte - MG</td><td>5</td><td style="color:var(--muted)">R$ 1.950</td></tr>
+              <tr><td>Salvador - BA</td><td>3</td><td style="color:var(--muted)">R$ 2.400</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
   </div><!-- /content -->
 </main>
 
@@ -821,6 +938,120 @@ select option { background:#1B3F72; }
     <div class="modal-ft">
       <button class="btn btn-ghost" onclick="closeModal('ov-estoque')">Cancelar</button>
       <button class="btn btn-red" onclick="salvarEstoque()">Registrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NOVA VIAGEM -->
+<div class="overlay" id="ov-viagem">
+  <div class="modal" style="width:540px">
+    <div class="modal-hd">
+      <div class="modal-title">✈️ Nova Solicitação de Viagem</div>
+      <button class="modal-x" onclick="closeModal('ov-viagem')">✕</button>
+    </div>
+    <div class="modal-bd">
+      <div class="fg"><label class="fl">Funcionário</label>
+        <select class="fs" id="vg-func">
+          <option>Leandro Viana</option><option>Roberto Dias</option>
+          <option>Marcos Tavares</option><option>Rafael Cunha</option>
+          <option>Diego Santana</option><option>Felipe Moreira</option>
+        </select>
+      </div>
+      <div class="fr">
+        <div class="fg"><label class="fl">Cidade de Destino</label><input class="fi" id="vg-dest" type="text" placeholder="Ex: São Paulo - SP"></div>
+        <div class="fg"><label class="fl">Motivo</label>
+          <select class="fs" id="vg-motivo">
+            <option>Manutenção Elétrica</option><option>Vistoria Técnica</option>
+            <option>Instalação</option><option>Comissionamento</option><option>Suporte Emergencial</option>
+          </select>
+        </div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label class="fl">Data de Saída</label><input class="fi" id="vg-saida" type="date"></div>
+        <div class="fg"><label class="fl">Data de Retorno</label><input class="fi" id="vg-retorno" type="date"></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label class="fl">Nº de Diárias</label><input class="fi" id="vg-diarias" type="number" min="1" placeholder="0" oninput="calcAdiantamento()"></div>
+        <div class="fg"><label class="fl">Valor da Diária (R$)</label><input class="fi" id="vg-vdiaria" type="number" placeholder="320,00" oninput="calcAdiantamento()"></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label class="fl">Adiantamento Solicitado (R$)</label><input class="fi" id="vg-adiant" type="text" placeholder="Calculado automaticamente" readonly style="opacity:0.7"></div>
+        <div class="fg"><label class="fl">Aprovador</label>
+          <select class="fs" id="vg-aprov">
+            <option>Thaylana Guimarães (RH)</option><option>Leandro Viana (Ger. Técnico)</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg"><label class="fl">Descrição da Atividade</label><textarea class="fta" id="vg-desc" placeholder="Descreva o serviço que será realizado..."></textarea></div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="closeModal('ov-viagem')">Cancelar</button>
+      <button class="btn btn-red" onclick="salvarViagem()">Enviar para Aprovação</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL APROVAÇÃO VIAGEM -->
+<div class="overlay" id="ov-aprovar-viagem">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-title" id="aprov-title">✅ Aprovar Solicitação</div>
+      <button class="modal-x" onclick="closeModal('ov-aprovar-viagem')">✕</button>
+    </div>
+    <div class="modal-bd">
+      <div id="aprov-info" style="background:rgba(0,0,0,0.2);border-radius:8px;padding:14px;margin-bottom:16px;font-size:13px;line-height:1.8"></div>
+      <div class="fg"><label class="fl">Decisão</label>
+        <select class="fs" id="aprov-decisao">
+          <option value="aprovada">✅ Aprovar</option>
+          <option value="reprovada">❌ Reprovar</option>
+          <option value="pendente">⏳ Solicitar ajuste</option>
+        </select>
+      </div>
+      <div class="fg"><label class="fl">Observação</label><textarea class="fta" id="aprov-obs" placeholder="Comentário para o funcionário..."></textarea></div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="closeModal('ov-aprovar-viagem')">Cancelar</button>
+      <button class="btn btn-red" onclick="confirmarAprovacao()">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DESPESA -->
+<div class="overlay" id="ov-despesa">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-title">🧾 Registrar Despesa</div>
+      <button class="modal-x" onclick="closeModal('ov-despesa')">✕</button>
+    </div>
+    <div class="modal-bd">
+      <div class="fr">
+        <div class="fg"><label class="fl">Funcionário</label>
+          <select class="fs" id="dp-func">
+            <option>Leandro Viana</option><option>Roberto Dias</option><option>Marcos Tavares</option><option>Rafael Cunha</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl">Viagem Vinculada</label>
+          <select class="fs" id="dp-viagem">
+            <option>VG-0001 · São Paulo</option><option>VG-0002 · Goiânia</option><option>VG-0003 · BH</option>
+          </select>
+        </div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label class="fl">Tipo de Despesa</label>
+          <select class="fs" id="dp-tipo">
+            <option>🏨 Hospedagem</option><option>🍽️ Alimentação</option><option>🚗 Transporte</option>
+            <option>🔧 Material em campo</option><option>📦 Outros</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl">Valor (R$)</label><input class="fi" id="dp-valor" type="number" placeholder="0,00"></div>
+      </div>
+      <div class="fg"><label class="fl">Nº da NF / Comprovante</label><input class="fi" id="dp-nf" type="text" placeholder="Ex: NF 00421 ou Recibo 88"></div>
+      <div class="fg"><label class="fl">Data da Despesa</label><input class="fi" id="dp-data" type="date"></div>
+      <div class="fg"><label class="fl">Observação</label><textarea class="fta" id="dp-obs" placeholder="Detalhes adicionais..."></textarea></div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="closeModal('ov-despesa')">Cancelar</button>
+      <button class="btn btn-red" onclick="salvarDespesa()">Registrar Despesa</button>
     </div>
   </div>
 </div>
@@ -1037,8 +1268,8 @@ function renderEquipe(){
 }
 
 // ── NAV ──
-const panelMap = {dashboard:'p-dashboard',chamados:'p-chamados',estoque:'p-estoque',movimentacoes:'p-movimentacoes',equipe:'p-equipe'};
-const titleMap = {dashboard:'Dashboard',chamados:'Chamados',estoque:'Estoque',movimentacoes:'Movimentações',equipe:'Equipe'};
+const panelMap = {dashboard:'p-dashboard',chamados:'p-chamados',estoque:'p-estoque',movimentacoes:'p-movimentacoes',equipe:'p-equipe',viagens:'p-viagens',despesas:'p-despesas','viagem-dashboard':'p-viagem-dashboard'};
+const titleMap = {dashboard:'Dashboard',chamados:'Chamados',estoque:'Estoque',movimentacoes:'Movimentações',equipe:'Equipe',viagens:'Solicitações de Viagem',despesas:'Prestação de Contas','viagem-dashboard':'Custos de Viagem'};
 
 function go(page, el){
   Object.values(panelMap).forEach(p=>{ const el=document.getElementById(p); if(el) el.classList.remove('active'); });
@@ -1050,6 +1281,8 @@ function go(page, el){
   if(page==='chamados') renderChamados(chamadosDB);
   if(page==='estoque') renderEstoque();
   if(page==='equipe') renderEquipe();
+  if(page==='viagens') renderViagens(viagensDB);
+  if(page==='despesas') renderDespesas();
 }
 
 function filtrarChamados(f,el){
@@ -1173,6 +1406,159 @@ function salvarProduto(){
   toast('✅ Produto atualizado com sucesso!');
 }
 
+// ── VIAGENS DATA ──
+const viagensDB = [
+  {id:'VG-0001',func:'Leandro Viana',dest:'São Paulo - SP',motivo:'Instalação',saida:'05/05/26',retorno:'09/05/26',diarias:4,adiant:'R$ 1.280',status:'encerrada',aprov:'Thaylana Guimarães'},
+  {id:'VG-0002',func:'Roberto Dias',dest:'Goiânia - GO',motivo:'Manutenção Elétrica',saida:'12/05/26',retorno:'15/05/26',diarias:3,adiant:'R$ 960',status:'encerrada',aprov:'Leandro Viana'},
+  {id:'VG-0003',func:'Marcos Tavares',dest:'Belo Horizonte - MG',motivo:'Vistoria Técnica',saida:'19/05/26',retorno:'22/05/26',diarias:3,adiant:'R$ 960',status:'aprovada',aprov:'Leandro Viana'},
+  {id:'VG-0004',func:'Leandro Viana',dest:'Salvador - BA',motivo:'Suporte Emergencial',saida:'26/05/26',retorno:'30/05/26',diarias:4,adiant:'R$ 1.280',status:'aprovada',aprov:'Thaylana Guimarães'},
+  {id:'VG-0005',func:'Rafael Cunha',dest:'Campinas - SP',motivo:'Comissionamento',saida:'28/05/26',retorno:'30/05/26',diarias:2,adiant:'R$ 640',status:'aprovada',aprov:'Leandro Viana'},
+  {id:'VG-0006',func:'Diego Santana',dest:'Uberlândia - MG',motivo:'Manutenção Elétrica',saida:'02/06/26',retorno:'04/06/26',diarias:2,adiant:'R$ 640',status:'pendente',aprov:'Leandro Viana'},
+  {id:'VG-0007',func:'Marcos Tavares',dest:'Ribeirão Preto - SP',motivo:'Instalação',saida:'03/06/26',retorno:'06/06/26',diarias:3,adiant:'R$ 960',status:'pendente',aprov:'Leandro Viana'},
+  {id:'VG-0008',func:'Roberto Dias',dest:'Anápolis - GO',motivo:'Vistoria Técnica',saida:'05/06/26',retorno:'06/06/26',diarias:1,adiant:'R$ 320',status:'pendente',aprov:'Thaylana Guimarães'},
+];
+
+const despesasDB = [
+  {id:'DP-001',func:'Leandro Viana',viagem:'VG-0001 · SP',tipo:'🏨 Hospedagem',valor:'R$ 890',nf:'NF 00421',data:'05/05/26',status:'aprovada'},
+  {id:'DP-002',func:'Leandro Viana',viagem:'VG-0001 · SP',tipo:'🍽️ Alimentação',valor:'R$ 320',nf:'Recibo 88',data:'06/05/26',status:'aprovada'},
+  {id:'DP-003',func:'Roberto Dias',viagem:'VG-0002 · GO',tipo:'🏨 Hospedagem',valor:'R$ 750',nf:'NF 00532',data:'12/05/26',status:'aprovada'},
+  {id:'DP-004',func:'Roberto Dias',viagem:'VG-0002 · GO',tipo:'🔧 Material',valor:'R$ 480',nf:'NF 00614',data:'13/05/26',status:'aprovada'},
+  {id:'DP-005',func:'Marcos Tavares',viagem:'VG-0003 · BH',tipo:'🏨 Hospedagem',valor:'R$ 720',nf:'NF 00788',data:'19/05/26',status:'analise'},
+  {id:'DP-006',func:'Marcos Tavares',viagem:'VG-0003 · BH',tipo:'🍽️ Alimentação',valor:'R$ 280',nf:'Recibo 102',data:'20/05/26',status:'analise'},
+  {id:'DP-007',func:'Leandro Viana',viagem:'VG-0004 · BA',tipo:'🚗 Transporte',valor:'R$ 640',nf:'NF 00901',data:'26/05/26',status:'analise'},
+  {id:'DP-008',func:'Rafael Cunha',viagem:'VG-0005 · SP',tipo:'🚗 Transporte',valor:'R$ 380',nf:'Recibo 115',data:'28/05/26',status:'analise'},
+];
+
+const stVg = {pendente:'c-andamento',aprovada:'c-fechado',encerrada:'c-aberto',reprovada:'c-critico'};
+const lbVg = {pendente:'Aguardando',aprovada:'Aprovada',encerrada:'Encerrada',reprovada:'Reprovada'};
+const stDp = {aprovada:'c-fechado',analise:'c-andamento',reprovada:'c-critico'};
+const lbDp = {aprovada:'Aprovada',analise:'Em Análise',reprovada:'Reprovada'};
+
+function renderViagens(data){
+  document.getElementById('tb-viagens').innerHTML = data.map(v=>`
+    <tr>
+      <td style="color:var(--muted);font-size:11px">${v.id}</td>
+      <td><div style="display:flex;align-items:center;gap:7px">
+        <div class="avatar" style="background:#1B5E9C;width:26px;height:26px;font-size:10px">${v.func.split(' ').map(x=>x[0]).join('').slice(0,2)}</div>
+        <span style="font-size:13px">${v.func}</span>
+      </div></td>
+      <td style="font-size:13px">📍 ${v.dest}</td>
+      <td style="color:var(--muted);font-size:11px">${v.saida} → ${v.retorno}<br><span style="color:var(--cinza2)">${v.diarias} diária(s)</span></td>
+      <td><span class="tag">${v.motivo}</span></td>
+      <td style="color:#4ADE80;font-weight:600;font-size:13px">${v.adiant}</td>
+      <td><span class="chip ${stVg[v.status]}">${lbVg[v.status]}</span></td>
+      <td>${v.status==='pendente'?`<button class="btn-edit" onclick="abrirAprovacao('${v.id}')">✅ Analisar</button>`:`<button class="btn-edit" style="opacity:0.4;cursor:default">Ver</button>`}</td>
+    </tr>`).join('');
+}
+
+function renderDespesas(){
+  document.getElementById('tb-despesas').innerHTML = despesasDB.map((d,i)=>`
+    <tr>
+      <td style="color:var(--muted);font-size:11px">${d.id}</td>
+      <td style="font-size:13px">${d.func}</td>
+      <td><span class="tag" style="font-size:10px">${d.viagem}</span></td>
+      <td style="font-size:12px">${d.tipo}</td>
+      <td style="color:#4ADE80;font-weight:600">${d.valor}</td>
+      <td style="color:var(--muted);font-size:11px">${d.nf}</td>
+      <td><span class="chip ${stDp[d.status]}">${lbDp[d.status]}</span></td>
+      <td>${d.status==='analise'?`<button class="btn-edit" onclick="aprovarDespesa(${i})">✅ Aprovar</button>`:'—'}</td>
+    </tr>`).join('');
+}
+
+function filtrarViagens(f,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const data = f==='todas' ? viagensDB : viagensDB.filter(v=>v.status===f);
+  renderViagens(data);
+}
+
+function calcAdiantamento(){
+  const d = parseInt(document.getElementById('vg-diarias').value)||0;
+  const v = parseFloat(document.getElementById('vg-vdiaria').value)||0;
+  const total = d*v;
+  document.getElementById('vg-adiant').value = total>0 ? 'R$ '+total.toLocaleString('pt-BR',{minimumFractionDigits:2}) : '';
+}
+
+let vgCount = 8;
+function salvarViagem(){
+  const func = document.getElementById('vg-func').value;
+  const dest = document.getElementById('vg-dest').value.trim();
+  if(!dest){ document.getElementById('vg-dest').focus(); return; }
+  vgCount++;
+  viagensDB.unshift({
+    id:'VG-00'+String(vgCount).padStart(2,'0'),
+    func, dest,
+    motivo: document.getElementById('vg-motivo').value,
+    saida: document.getElementById('vg-saida').value || '—',
+    retorno: document.getElementById('vg-retorno').value || '—',
+    diarias: parseInt(document.getElementById('vg-diarias').value)||1,
+    adiant: document.getElementById('vg-adiant').value || 'R$ —',
+    status:'pendente',
+    aprov: document.getElementById('vg-aprov').value.split(' (')[0],
+  });
+  closeModal('ov-viagem');
+  document.getElementById('vg-dest').value='';
+  document.getElementById('vg-desc').value='';
+  toast('✅ Solicitação enviada para aprovação!');
+  renderViagens(viagensDB);
+}
+
+let aprovIdx = -1;
+function abrirAprovacao(id){
+  apovIdx = viagensDB.findIndex(v=>v.id===id);
+  const v = viagensDB[apovIdx];
+  document.getElementById('aprov-title').textContent = '✅ Analisar — '+v.id;
+  document.getElementById('aprov-info').innerHTML =
+    `<b>Funcionário:</b> ${v.func}<br>
+     <b>Destino:</b> ${v.dest}<br>
+     <b>Período:</b> ${v.saida} → ${v.retorno} (${v.diarias} diária(s))<br>
+     <b>Motivo:</b> ${v.motivo}<br>
+     <b>Adiantamento solicitado:</b> <span style="color:#4ADE80;font-weight:700">${v.adiant}</span>`;
+  document.getElementById('ov-aprovar-viagem').classList.add('open');
+}
+
+function confirmarAprovacao(){
+  const decisao = document.getElementById('aprov-decisao').value;
+  if(apovIdx>=0) viagensDB[apovIdx].status = decisao;
+  closeModal('ov-aprovar-viagem');
+  const msgs = {aprovada:'✅ Solicitação aprovada com sucesso!',reprovada:'❌ Solicitação reprovada.',pendente:'⏳ Ajuste solicitado ao funcionário.'};
+  toast(msgs[decisao]||'Atualizado!');
+  renderViagens(viagensDB);
+}
+
+let dpCount = despesasDB.length;
+function salvarDespesa(){
+  dpCount++;
+  despesasDB.unshift({
+    id:'DP-00'+String(dpCount).padStart(2,'0'),
+    func: document.getElementById('dp-func').value,
+    viagem: document.getElementById('dp-viagem').value,
+    tipo: document.getElementById('dp-tipo').value,
+    valor: 'R$ '+(parseFloat(document.getElementById('dp-valor').value)||0).toLocaleString('pt-BR',{minimumFractionDigits:2}),
+    nf: document.getElementById('dp-nf').value||'—',
+    data: document.getElementById('dp-data').value||'—',
+    status:'analise',
+  });
+  closeModal('ov-despesa');
+  toast('✅ Despesa registrada e enviada para análise!');
+  renderDespesas();
+}
+
+function aprovarDespesa(i){
+  despesasDB[i].status='aprovada';
+  renderDespesas();
+  toast('✅ Despesa aprovada!');
+}
+
+function openModalViagem(){ document.getElementById('ov-viagem').classList.add('open'); }
+function openModalDespesa(){ document.getElementById('ov-despesa').classList.add('open'); }
+
+document.addEventListener('DOMContentLoaded',()=>{
+  ['ov-viagem','ov-aprovar-viagem','ov-despesa'].forEach(id=>{
+    document.getElementById(id).addEventListener('click',e=>{ if(e.target===e.currentTarget) closeModal(id); });
+  });
+});
+
 // ── MOBILE SIDEBAR ──
 function toggleSidebar(){
   document.querySelector('.sidebar').classList.toggle('open');
@@ -1194,6 +1580,8 @@ document.querySelectorAll('.nav-item').forEach(item=>{
 renderChamados(chamadosDB);
 renderEstoque();
 renderEquipe();
+renderViagens(viagensDB);
+renderDespesas();
 </script>
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 </body>
